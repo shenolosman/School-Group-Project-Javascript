@@ -40,7 +40,7 @@ async function showPokemon(pokemon) {
   })">
     Läs mer
   </button>
-   </li>
+  </li>
    </div>
       `
     )
@@ -49,6 +49,7 @@ async function showPokemon(pokemon) {
   pokeWeb.innerHTML = pokemonHTMLstring;
 }
 
+//TODO Fixa så man inte behöver dubbelklicka för att läsa mer..
 async function selectPokemon(id) {
   const url = new URL(`https://pokeapi.co`);
   url.pathname = `/api/v2/pokemon/${id}`;
@@ -62,7 +63,7 @@ function showModal(pokeman) {
   const type = pokeman.types.map((type) => type.type.name).join(", ");
 
   const htmlInfoString = `
-  <div class="modal fade" id="myModal" tabindex="-1" >
+  <div class="modal fade" id="myModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -79,7 +80,8 @@ function showModal(pokeman) {
     </div>
   </div>
   </div>
-  </div>`;
+  </div>
+  `;
 
   pokeWeb.innerHTML = htmlInfoString + pokeWeb.innerHTML;
 
@@ -87,9 +89,9 @@ function showModal(pokeman) {
   document.getElementById("closeX").onclick = closeModal;
 }
 function closeModal() {
-  const modal = document.querySelector(".modal");
-  const fade = document.querySelector(".fade");
-  fade.remove();
-  modal.remove();
+  const elements = document.getElementsByClassName("fade");
+  while (elements.length > 0) {
+    elements[0].parentNode.removeChild(elements[0]);
+  }
 }
 fetchPokemon();

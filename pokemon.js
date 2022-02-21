@@ -35,7 +35,7 @@ async function showPokemon(pokemon) {
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text">$${price[pokeman.id - 1]}<p>
      <div class="text-center">
-  <button type="button" id="select-pokemon-btn" class="btn btn-primary" onclick="selectPokemon(${
+  <button type="button" id="select-pokemon-btn" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="selectPokemon(${
     pokeman.id
   })">
     Läs mer
@@ -55,29 +55,41 @@ async function selectPokemon(id) {
 
   const response = await fetch(url);
   const pokeman = await response.json();
-  showPopup(pokeman);
+  showModal(pokeman);
 }
-function showPopup(pokeman) {
+function showModal(pokeman) {
   const image = pokeman.sprites[`front_default`];
   const type = pokeman.types.map((type) => type.type.name).join(", ");
 
   const htmlInfoString = `
-    <div class="popup">
-  
-  <h1>${pokeman.id}. ${pokeman.name}</h1>
-    <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
-    
-    <img class="card-image" src="${image}"/>
-    <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b> |</p>
+  <div class="modal fade" id="myModal" tabindex="-1" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-label"> ${pokeman.name}</h3>
+        <button type="button" class="btn-close" id="closeX" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <img class="card-image" src="${image}"/>
+      <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b> |</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal" value="close">Close</button>
+      </div>
+    </div>
   </div>
   </div>
-    `;
+  </div>`;
 
   pokeWeb.innerHTML = htmlInfoString + pokeWeb.innerHTML;
-  document.getElementById("closeBtn").onclick = closePopup;
+
+  document.getElementById("closeBtn").onclick = closeModal;
+  document.getElementById("closeX").onclick = closeModal;
 }
-function closePopup() {
-  const popup = document.querySelector(".popup");
-  popup.parentElement.removeChild(popup);
+function closeModal() {
+  const modal = document.querySelector(".modal");
+  const fade = document.querySelector(".fade");
+  fade.remove();
+  modal.remove();
 }
 fetchPokemon();

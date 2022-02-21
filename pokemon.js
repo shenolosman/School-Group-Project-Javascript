@@ -22,6 +22,10 @@ async function fetchPokemon() {
 }
 
 async function showPokemon(pokemon) {
+  let price = [
+    29, 40, 39, 50, 80, 79, 30, 39, 60, 20, 89, 59, 29, 50, 90, 99, 39, 20, 40,
+    90,
+  ];
   const pokemonHTMLstring = pokemon
     .map(
       (pokeman) =>
@@ -29,11 +33,15 @@ async function showPokemon(pokemon) {
       <li class="card">
       <img class="card-image" src="${pokeman.image}"/>
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
-     
-  <button type="button" id="select-pokemon-btn" class="btn btn-primary" onclick="selectPokemon(${pokeman.id})">
+     <p class="price-text">$${price[pokeman.id - 1]}<p>
+     <div class="text-center">
+  <button type="button" id="select-pokemon-btn" class="btn btn-primary" onclick="selectPokemon(${
+    pokeman.id
+  })">
     Läs mer
   </button>
    </li>
+   </div>
       `
     )
     .join("");

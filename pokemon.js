@@ -1,14 +1,27 @@
+// DOM Objects
 document.getElementById("title").innerHTML = "Pokemon Webshop";
-
 const pokeWeb = document.getElementById("pokeWeb");
+const leftpagination = document.querySelector(".left-button");
+const rightpagination = document.querySelector(".right-button");
 
+//constanst and variables
+let prevUrl=null;
+let nextUrl=null;
+
+//Functions
 async function fetchPokemon() {
-  const url = new URL(`https://pokeapi.co`);
+   url = new URL(`https://pokeapi.co`);
   url.pathname = `/api/v2/pokemon`;
-  url.searchParams.set("limit", 20);
+ url.searchParams.set("limit", 20);
+ url.searchParams.set("offset",0);
 
   const response = await fetch(url);
+  console.log(response);
   const data = await response.json();
+  const {previous,next}=data;
+  prevUrl=previous;
+  nextUrl=next;
+  console.log(data);
 
   const pokemon = data.results.map((result, index) => ({
     apiURL: result.url,
@@ -18,14 +31,14 @@ async function fetchPokemon() {
       index + 1
     }.png`,
   }));
+  console.log(pokemon);
   showPokemon(pokemon);
 }
 
 async function showPokemon(pokemon) {
-  let price = [
-    29, 40, 39, 50, 80, 79, 30, 39, 60, 20, 89, 59, 29, 50, 90, 99, 39, 20, 40,
-    90,
-  ];
+  let price = Array.from({ length: 1000 }, () =>
+    Math.floor((Math.random() * 100)+20)
+  );
   const pokemonHTMLstring = pokemon
     .map(
       (pokeman) =>
@@ -34,11 +47,16 @@ async function showPokemon(pokemon) {
       <img class="card-image" src="${pokeman.image}"/>
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text">$${price[pokeman.id - 1]}<p>
-     <div class="text-center">
-  <button type="button" id="select-pokemon-btn" class="btn btn-primary" onclick="selectPokemon(${
+     <div >
+  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${
     pokeman.id
   })">
     Läs mer
+  </button>
+  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${
+    pokeman.id
+  })">
+    Köpa Kort
   </button>
    </li>
    </div>
@@ -62,15 +80,13 @@ function showPopup(pokeman) {
   const type = pokeman.types.map((type) => type.type.name).join(", ");
 
   const htmlInfoString = `
-    <div class="popup">
-  
-  <h1>${pokeman.id}. ${pokeman.name}</h1>
-    <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
-    
-    <img class="card-image" src="${image}"/>
-    <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b> |</p>
-  </div>
-  </div>
+    <div class="popup">  
+      <h1 style="margin-top:100px;">${pokeman.id}. ${pokeman.name}</h1>
+      <img class="card-image" src="${image}"/>
+      <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b></p>
+      <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
+      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Köpa Kort</button>
+    </div>
     `;
 
   pokeWeb.innerHTML = htmlInfoString + pokeWeb.innerHTML;
@@ -80,4 +96,29 @@ function closePopup() {
   const popup = document.querySelector(".popup");
   popup.parentElement.removeChild(popup);
 }
+
+function buyPokemon() {}
+
+
+const handleRightButtonClick=()=>{
+ // console.log(e)
+if(nextUrl){
+fetchPokemon(nextUrl);
+}
+}
+
+const handleLeftButtonClick=()=>{
+ if(prevUrl){
+   fetchPokemon(prevUrl);
+ }
+ 
+ }
+//adding event listeners
+
+
+leftpagination.addEventListener('click',handleLeftButtonClick);
+rightpagination.addEventListener('click',handleRightButtonClick);
+
+
+//initialize functions
 fetchPokemon();

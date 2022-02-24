@@ -1,31 +1,39 @@
 document.getElementById("title").innerHTML = "Pokemon Webshop";
 
 const pokeWeb = document.getElementById("pokeWeb");
+let offset = 0;
 
-async function fetchPokemon() {
-  const url = new URL(`https://pokeapi.co`);
-  url.pathname = `/api/v2/pokemon`;
-  url.searchParams.set("limit", 20);
+async function fetchPokemon(url) {
+  url = new URL(url);
 
   const response = await fetch(url);
+
   const data = await response.json();
+
+  const pokiurl = data.results.map((result) => ({
+    id: result.url.split("/")[6],
+  }));
 
   const pokemon = data.results.map((result, index) => ({
     apiURL: result.url,
     name: result.name,
-    id: index + 1,
+    id: JSON.stringify(pokiurl[index])
+      .split(":")[1]
+      .split("}")[0]
+      .split('"')[1],
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-      index + 1
+      JSON.stringify(pokiurl[index]).split(":")[1].split("}")[0].split('"')[1]
     }.png`,
   }));
+  console.log(pokemon);
+
   showPokemon(pokemon);
 }
 
 async function showPokemon(pokemon) {
-  let price = [
-    29, 40, 39, 50, 80, 79, 30, 39, 60, 20, 89, 59, 29, 50, 90, 99, 39, 20, 40,
-    90,
-  ];
+  let price = Array.from({ length: 2000 }, () =>
+    Math.floor(Math.random() * 100 + 20)
+  );
   const pokemonHTMLstring = pokemon
     .map(
       (pokeman) =>
@@ -34,13 +42,18 @@ async function showPokemon(pokemon) {
       <img class="card-image" src="${pokeman.image}"/>
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text">$${price[pokeman.id - 1]}<p>
-     <div class="text-center">
-  <button type="button" id="select-pokemon-btn" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="selectPokemon(${
+     <div >
+  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${
     pokeman.id
   })">
     Läs mer
   </button>
-  </li>
+  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${
+    pokeman.id
+  })">
+    Köpa Kort
+  </button>
+   </li>
    </div>
       `
     )
@@ -49,49 +62,33 @@ async function showPokemon(pokemon) {
   pokeWeb.innerHTML = pokemonHTMLstring;
 }
 
-//TODO Fixa så man inte behöver dubbelklicka för att läsa mer..
 async function selectPokemon(id) {
   const url = new URL(`https://pokeapi.co`);
   url.pathname = `/api/v2/pokemon/${id}`;
 
   const response = await fetch(url);
   const pokeman = await response.json();
-  showModal(pokeman);
+  showPopup(pokeman);
 }
-function showModal(pokeman) {
+function showPopup(pokeman) {
   const image = pokeman.sprites[`front_default`];
   const type = pokeman.types.map((type) => type.type.name).join(", ");
 
   const htmlInfoString = `
-  <div class="modal fade" id="myModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="modal-label"> ${pokeman.name}</h3>
-        <button type="button" class="btn-close" id="closeX" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
+    <div class="popup">  
+      <h1 ">${pokeman.id}. ${pokeman.name}</h1>
       <img class="card-image" src="${image}"/>
-      <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b> |</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal" value="close">Close</button>
-      </div>
+      <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b></p>
+      <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
+      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Köpa Kort</button>
     </div>
-  </div>
-  </div>
-  </div>
-  `;
+    `;
 
   pokeWeb.innerHTML = htmlInfoString + pokeWeb.innerHTML;
-
-  document.getElementById("closeBtn").onclick = closeModal;
-  document.getElementById("closeX").onclick = closeModal;
+  document.getElementById("closeBtn").onclick = closePopup;
 }
-function closeModal() {
-  const elements = document.getElementsByClassName("fade");
-  while (elements.length > 0) {
-    elements[0].parentNode.removeChild(elements[0]);
-  }
+function closePopup() {
+  const popup = document.querySelector(".popup");
+  popup.parentElement.removeChild(popup);
 }
-fetchPokemon();
+fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=21&offset=${offset}`);

@@ -15,9 +15,9 @@ async function fetchPokemon(url) {
   url = new URL(url);
 
   const response = await fetch(url);
-  
+
   const data = await response.json();
-  
+
   const { result, previous, next } = data;
   prevUrl = previous;
   nextUrl = next;
@@ -35,13 +35,14 @@ async function fetchPokemon(url) {
       .split('"')[1],
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
       JSON.stringify(pokiurl[index]).split(":")[1].split("}")[0].split('"')[1]
-    }.png`}));
+    }.png`,
+  }));
 
   showPokemon(pokemon);
 }
 
 async function showPokemon(pokemon) {
-  let price = Array.from({ length: 2000 }, () =>
+  let price = Array.from({ length: 12000 }, () =>
     Math.floor(Math.random() * 100 + 20)
   );
   const pokemonHTMLstring = pokemon
@@ -53,10 +54,14 @@ async function showPokemon(pokemon) {
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text">$${price[pokeman.id - 1]}<p>
      <div >
-  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
+  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${
+    pokeman.id
+  })">
     Read More
   </button>
-  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">
+  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${
+    pokeman.id
+  })">
     Buy Card
   </button>
    </li>

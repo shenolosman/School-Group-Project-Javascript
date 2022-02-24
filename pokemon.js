@@ -1,14 +1,26 @@
+// DOM Objects
 document.getElementById("title").innerHTML = "Pokemon Webshop";
-
 const pokeWeb = document.getElementById("pokeWeb");
-let offset = 0;
 
+const leftpagination = document.querySelector(".left-button");
+const leftpaginationDisabled = document.querySelector(".previousDisable");
+leftpaginationDisabled.classList.add("disabled");
+const rightpagination = document.querySelector(".right-button");
+
+//constanst and variables
+let prevUrl = null;
+let nextUrl = null;
+//Functions
 async function fetchPokemon(url) {
   url = new URL(url);
 
   const response = await fetch(url);
-
+  
   const data = await response.json();
+  
+  const { result, previous, next } = data;
+  prevUrl = previous;
+  nextUrl = next;
 
   const pokiurl = data.results.map((result) => ({
     id: result.url.split("/")[6],
@@ -23,9 +35,7 @@ async function fetchPokemon(url) {
       .split('"')[1],
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
       JSON.stringify(pokiurl[index]).split(":")[1].split("}")[0].split('"')[1]
-    }.png`,
-  }));
-  console.log(pokemon);
+    }.png`}));
 
   showPokemon(pokemon);
 }
@@ -43,14 +53,10 @@ async function showPokemon(pokemon) {
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text">$${price[pokeman.id - 1]}<p>
      <div >
-  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${
-    pokeman.id
-  })">
+  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
     Read More
   </button>
-  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${
-    pokeman.id
-  })">
+  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">
     Buy Card
   </button>
    </li>
@@ -91,4 +97,28 @@ function closePopup() {
   const popup = document.querySelector(".popup");
   popup.parentElement.removeChild(popup);
 }
-fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=21&offset=${offset}`);
+
+function buyPokemon() {
+  //skriv function to add pokemons to buy listan
+}
+
+const handleRightButtonClick = () => {
+  if (leftpaginationDisabled)
+    leftpaginationDisabled.classList.remove("disabled");
+  if (nextUrl) {
+    fetchPokemon(nextUrl);
+  }
+};
+
+const handleLeftButtonClick = () => {
+  if (leftpagination === null) leftpaginationDisabled.classList.add("disabled");
+  if (prevUrl) {
+    fetchPokemon(prevUrl);
+  }
+};
+//adding event listeners
+leftpagination.addEventListener("click", handleLeftButtonClick);
+rightpagination.addEventListener("click", handleRightButtonClick);
+
+//initialize functions
+fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=0`);

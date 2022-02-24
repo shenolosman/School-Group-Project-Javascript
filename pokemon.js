@@ -2,42 +2,44 @@
 document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
 const leftpagination = document.querySelector(".left-button");
+const leftpaginationDisabled = document.querySelector(".previousDisable");
+leftpaginationDisabled.classList.add("disabled");
 const rightpagination = document.querySelector(".right-button");
 
 //constanst and variables
-let prevUrl=null;
-let nextUrl=null;
-
+let prevUrl = null;
+let nextUrl = null;
 //Functions
-async function fetchPokemon() {
-   url = new URL(`https://pokeapi.co`);
-  url.pathname = `/api/v2/pokemon`;
- url.searchParams.set("limit", 20);
- url.searchParams.set("offset",0);
+async function fetchPokemon(url) {
+  url = new URL(url);
 
   const response = await fetch(url);
-  console.log(response);
+  
   const data = await response.json();
-  const {previous,next}=data;
-  prevUrl=previous;
-  nextUrl=next;
-  console.log(data);
+  const { result, previous, next } = data;
+  prevUrl = previous;
+  nextUrl = next;
+
+  const pokiurl = data.results.map((result) => ({
+    a: result.url.split("/")[6],
+  }));
 
   const pokemon = data.results.map((result, index) => ({
     apiURL: result.url,
     name: result.name,
-    id: index + 1,
+    id: JSON.stringify(pokiurl[index])
+      .split(":")[1]
+      .split("}")[0]
+      .split('"')[1],
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-      index + 1
-    }.png`,
-  }));
-  console.log(pokemon);
+      JSON.stringify(pokiurl[index]).split(":")[1].split("}")[0].split('"')[1]
+    }.png`}));
   showPokemon(pokemon);
 }
 
 async function showPokemon(pokemon) {
-  let price = Array.from({ length: 1000 }, () =>
-    Math.floor((Math.random() * 100)+20)
+  let price = Array.from({ length: 2000 }, () =>
+    Math.floor(Math.random() * 100 + 20)
   );
   const pokemonHTMLstring = pokemon
     .map(
@@ -97,28 +99,27 @@ function closePopup() {
   popup.parentElement.removeChild(popup);
 }
 
-function buyPokemon() {}
-
-
-const handleRightButtonClick=()=>{
- // console.log(e)
-if(nextUrl){
-fetchPokemon(nextUrl);
-}
+function buyPokemon() {
+  //skriv function to add pokemons to buy listan
 }
 
-const handleLeftButtonClick=()=>{
- if(prevUrl){
-   fetchPokemon(prevUrl);
- }
- 
- }
+const handleRightButtonClick = () => {
+  if (leftpaginationDisabled)
+    leftpaginationDisabled.classList.remove("disabled");
+  if (nextUrl) {
+    fetchPokemon(nextUrl);
+  }
+};
+
+const handleLeftButtonClick = () => {
+  if (leftpagination === null) leftpaginationDisabled.classList.add("disabled");
+  if (prevUrl) {
+    fetchPokemon(prevUrl);
+  }
+};
 //adding event listeners
-
-
-leftpagination.addEventListener('click',handleLeftButtonClick);
-rightpagination.addEventListener('click',handleRightButtonClick);
-
+leftpagination.addEventListener("click", handleLeftButtonClick);
+rightpagination.addEventListener("click", handleRightButtonClick);
 
 //initialize functions
-fetchPokemon();
+fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=0`);

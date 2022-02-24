@@ -41,10 +41,6 @@ h1 {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   grid-gap: 20px;
 }
-.pokemon-container {
-  
-  margin: 0 auto;
-}
 .popup {
   position: fixed;
   top: 0;
@@ -58,4 +54,12 @@ h1 {
 .text {
   color: rgb(255, 255, 255);
   font-size: 20px;
+}
+.pilar{
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+.left-button,.right-button{
+  cursor:pointer;
 }

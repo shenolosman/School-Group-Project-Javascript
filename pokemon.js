@@ -1,6 +1,7 @@
 // DOM Objects
 document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
+
 const leftpagination = document.querySelector(".left-button");
 const leftpaginationDisabled = document.querySelector(".previousDisable");
 leftpaginationDisabled.classList.add("disabled");
@@ -16,12 +17,13 @@ async function fetchPokemon(url) {
   const response = await fetch(url);
   
   const data = await response.json();
+  
   const { result, previous, next } = data;
   prevUrl = previous;
   nextUrl = next;
 
   const pokiurl = data.results.map((result) => ({
-    a: result.url.split("/")[6],
+    id: result.url.split("/")[6],
   }));
 
   const pokemon = data.results.map((result, index) => ({
@@ -34,6 +36,7 @@ async function fetchPokemon(url) {
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
       JSON.stringify(pokiurl[index]).split(":")[1].split("}")[0].split('"')[1]
     }.png`}));
+
   showPokemon(pokemon);
 }
 
@@ -50,15 +53,11 @@ async function showPokemon(pokemon) {
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text">$${price[pokeman.id - 1]}<p>
      <div >
-  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${
-    pokeman.id
-  })">
-    Läs mer
+  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
+    Read More
   </button>
-  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${
-    pokeman.id
-  })">
-    Köpa Kort
+  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">
+    Buy Card
   </button>
    </li>
    </div>
@@ -83,11 +82,11 @@ function showPopup(pokeman) {
 
   const htmlInfoString = `
     <div class="popup">  
-      <h1 style="margin-top:100px;">${pokeman.id}. ${pokeman.name}</h1>
+      <h1 ">${pokeman.id}. ${pokeman.name}</h1>
       <img class="card-image" src="${image}"/>
       <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b></p>
       <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
-      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Köpa Kort</button>
+      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Buy Card</button>
     </div>
     `;
 

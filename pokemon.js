@@ -46,12 +46,12 @@ async function showPokemon(pokemon) {
   <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${
     pokeman.id
   })">
-    Läs mer
+    Read More
   </button>
   <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${
     pokeman.id
   })">
-    Köpa Kort
+    Buy Card
   </button>
    </li>
    </div>
@@ -80,7 +80,7 @@ function showPopup(pokeman) {
       <img class="card-image" src="${image}"/>
       <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b></p>
       <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
-      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Köpa Kort</button>
+      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Buy Card</button>
     </div>
     `;
 

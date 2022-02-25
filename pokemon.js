@@ -119,6 +119,8 @@ function showPopup(pokeman) {
 function closePopup() {
   const popup = document.querySelector(".popup");
   popup.parentElement.removeChild(popup);
+
+  document.querySelector("#pokemonName").value = "";
 }
 
 function buyPokemon() {

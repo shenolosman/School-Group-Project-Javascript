@@ -2,6 +2,12 @@
 document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
 
+document.querySelector("#search").addEventListener("click", getPokemon);
+
+function lowerCaseName(string) {
+  return string.toLowerCase();
+}
+
 const leftpagination = document.querySelector(".left-button");
 leftpagination.innerHTML = "Previous";
 const leftpaginationDisabled = document.querySelector(".previousDisable");
@@ -82,6 +88,17 @@ async function selectPokemon(id) {
   const pokeman = await response.json();
   showPopup(pokeman);
 }
+async function getPokemon() {
+  const nameValue = document.querySelector("#pokemonName").value;
+  const pokemonName = lowerCaseName(nameValue);
+
+  const pokemonUrl = new URL(`https://pokeapi.co`);
+  pokemonUrl.pathname = `/api/v2/pokemon/${pokemonName}`;
+
+  const response = await fetch(pokemonUrl);
+  const pokeman = await response.json();
+  showPopup(pokeman);
+}
 function showPopup(pokeman) {
   const image = pokeman.sprites[`front_default`];
   const type = pokeman.types.map((type) => type.type.name).join(", ");
@@ -128,6 +145,5 @@ const handleLeftButtonClick = () => {
 //adding event listeners
 leftpagination.addEventListener("click", handleLeftButtonClick);
 rightpagination.addEventListener("click", handleRightButtonClick);
-
 //initialize functions
 fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=0`);

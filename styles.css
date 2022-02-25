@@ -51,6 +51,7 @@ h1 {
   width: 100vw;
   align-items: center;
   text-align: center;
+  color: white;
 }
 .text {
   color: rgb(255, 255, 255);
@@ -64,4 +65,13 @@ h1 {
 .left-button,
 .right-button {
   cursor: pointer;
+}
+.searchbox {
+  border-radius: 10px;
+}
+#search,
+#close-btn {
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  border: 1px solid;
 }

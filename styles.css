@@ -56,11 +56,12 @@ h1 {
   color: rgb(255, 255, 255);
   font-size: 20px;
 }
-.pilar{
+.pilar {
   margin-top: 20px;
   display: flex;
   justify-content: center;
 }
-.left-button,.right-button{
-  cursor:pointer;
+.left-button,
+.right-button {
+  cursor: pointer;
 }

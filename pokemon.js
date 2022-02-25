@@ -3,10 +3,13 @@ document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
 
 const leftpagination = document.querySelector(".left-button");
+leftpagination.innerHTML = "Previous";
 const leftpaginationDisabled = document.querySelector(".previousDisable");
 leftpaginationDisabled.classList.add("disabled");
-const rightpagination = document.querySelector(".right-button");
 
+const rightpagination = document.querySelector(".right-button");
+rightpagination.innerHTML = "Next";
+const rightpaginationDisabled = document.querySelector(".nextDisable");
 //constanst and variables
 let prevUrl = null;
 let nextUrl = null;
@@ -37,7 +40,6 @@ async function fetchPokemon(url) {
       JSON.stringify(pokiurl[index]).split(":")[1].split("}")[0].split('"')[1]
     }.png`,
   }));
-
   showPokemon(pokemon);
 }
 
@@ -69,7 +71,6 @@ async function showPokemon(pokemon) {
       `
     )
     .join("");
-
   pokeWeb.innerHTML = pokemonHTMLstring;
 }
 
@@ -110,13 +111,16 @@ function buyPokemon() {
 const handleRightButtonClick = () => {
   if (leftpaginationDisabled)
     leftpaginationDisabled.classList.remove("disabled");
+  if (nextUrl === null) rightpaginationDisabled.classList.add("disabled");
   if (nextUrl) {
     fetchPokemon(nextUrl);
   }
 };
 
 const handleLeftButtonClick = () => {
-  if (leftpagination === null) leftpaginationDisabled.classList.add("disabled");
+  if (rightpaginationDisabled)
+    rightpaginationDisabled.classList.remove("disabled");
+  if (prevUrl === null) leftpaginationDisabled.classList.add("disabled");
   if (prevUrl) {
     fetchPokemon(prevUrl);
   }

@@ -69,9 +69,13 @@ h1 {
 .searchbox {
   border-radius: 10px;
 }
-#search,
-#close-btn {
+#search {
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
   border: 1px solid;
+}
+#search:hover {
+  background-color: rgba(62, 62, 255, 0.171);
+  font-size: 18px;
+  border: 1.5px solid;
 }

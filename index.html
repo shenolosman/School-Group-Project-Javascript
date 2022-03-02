@@ -22,11 +22,16 @@
                         class="d-inline-block align-text-top">
                     <strong id="title"></strong>
                 </a>
-                <div class="cart">
+               
+                    
+                <div class="searchbox">
+                    <input type="text" id="pokemonName" placeholder="Pokémon Name/ID..">
+                    <button id="search">🔍</button>
+                    <span class="cart"> 
                     <span class="cart-quantity"></span>
                     <i id="cart" class="fas fa-shopping-cart" onclick="showCart2()"></i>
-                </div>
-            </div>
+                </span>
+                </div>          
         </nav>
     </header>
     <main>
@@ -35,26 +40,22 @@
 
             </div>
         </aside>
-
         <section class="container">
             <ul class="pagination pagination-lg pilar">
                 <li class="page-item previousDisable">
                     <a class="page-link">
-                        <div class="left-button ">Previous</div>
+                        <div class="left-button"></div>
                     </a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link right-button">
-                        Next </a>
+                <li class="page-item nextDisable">
+                    <a class="page-link right-button"></a>
                 </li>
             </ul>
+        </section>
+        <section class="container">
             <div class="pokemonBox"></div>
             <ol id="pokeWeb"></ol>
-<<<<<<< HEAD
         </section>
-=======
-        </section>  
->>>>>>> 76fa7c318ced9e62a5d40660e20969c54c76eaac
     </main>
     <script src="pokemon.js"></script>
 </body>

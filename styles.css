@@ -52,18 +52,15 @@ h1 {
   width: 100vw;
   align-items: center;
   text-align: center;
+  color: white;
 }
 .text {
   color: rgb(255, 255, 255);
   font-size: 20px;
 }
-.pilar{
+.pilar {
   margin-top: 20px;
 }
-.left-button,.right-button{
-  cursor:pointer;
-}
-
 
 /*CART MODAL*/
 @media screen and (min-width: 750px) {
@@ -242,3 +239,20 @@ h1 {
   cursor: pointer;
   font-size: 20px;
  }
+.left-button,
+.right-button {
+  cursor: pointer;
+}
+.searchbox {
+  border-radius: 10px;
+}
+#search {
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  border: 1px solid;
+}
+#search:hover {
+  background-color: rgba(62, 62, 255, 0.171);
+  font-size: 18px;
+  border: 1.5px solid;
+}

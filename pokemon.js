@@ -1,12 +1,22 @@
 // DOM Objects
 document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
-const webshop=document.getElementById("webShop");
+const webshop = document.getElementById("webShop");
+
+document.querySelector("#search").addEventListener("click", getPokemon);
+
+function lowerCaseName(string) {
+  return string.toLowerCase();
+}
+
 const leftpagination = document.querySelector(".left-button");
+leftpagination.innerHTML = "Previous";
 const leftpaginationDisabled = document.querySelector(".previousDisable");
 leftpaginationDisabled.classList.add("disabled");
-const rightpagination = document.querySelector(".right-button");
 
+const rightpagination = document.querySelector(".right-button");
+rightpagination.innerHTML = "Next";
+const rightpaginationDisabled = document.querySelector(".nextDisable");
 //constanst and variables
 let prevUrl = null;
 let nextUrl = null;
@@ -18,7 +28,7 @@ async function fetchPokemon(url) {
   const response = await fetch(url);
 
   const data = await response.json();
-  
+
   const { result, previous, next } = data;
   prevUrl = previous;
   nextUrl = next;
@@ -42,7 +52,7 @@ async function fetchPokemon(url) {
 }
 
 async function showPokemon(pokemon) {
-  let price = Array.from({ length: 2000 }, () =>
+  let price = Array.from({ length: 12000 }, () =>
     Math.floor(Math.random() * 100 + 20)
   );
   let price2 = 299;
@@ -55,16 +65,17 @@ async function showPokemon(pokemon) {
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text"> <span class="product-price">${price2} Sek</span><p>
      <div >
-  <button id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
-    Läs mer
+  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
+    Read More
   </button>
-  <button class="btn btn-primary" onclick=addToCart(${pokeman.id}) >Köpa Kort</button>
+  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">
+    Buy Card
+  </button>
    </li>
    </div>
       `
     )
     .join("");
-
   pokeWeb.innerHTML = pokemonHTMLstring;
 }
 
@@ -73,6 +84,17 @@ async function selectPokemon(id) {
   url.pathname = `/api/v2/pokemon/${id}`;
 
   const response = await fetch(url);
+  const pokeman = await response.json();
+  showPopup(pokeman);
+}
+async function getPokemon() {
+  const nameValue = document.querySelector("#pokemonName").value;
+  const pokemonName = lowerCaseName(nameValue);
+
+  const pokemonUrl = new URL(`https://pokeapi.co`);
+  pokemonUrl.pathname = `/api/v2/pokemon/${pokemonName}`;
+
+  const response = await fetch(pokemonUrl);
   const pokeman = await response.json();
   showPopup(pokeman);
 }
@@ -95,18 +117,23 @@ function showPopup(pokeman) {
 function closePopup() {
   const popup = document.querySelector(".popup");
   popup.parentElement.removeChild(popup);
+
+  document.querySelector("#pokemonName").value = "";
 }
 
 const handleRightButtonClick = () => {
   if (leftpaginationDisabled)
     leftpaginationDisabled.classList.remove("disabled");
+  if (nextUrl === null) rightpaginationDisabled.classList.add("disabled");
   if (nextUrl) {
     fetchPokemon(nextUrl);
   }
 };
 
 const handleLeftButtonClick = () => {
-  if (leftpagination === null) leftpaginationDisabled.classList.add("disabled");
+  if (rightpaginationDisabled)
+    rightpaginationDisabled.classList.remove("disabled");
+  if (prevUrl === null) leftpaginationDisabled.classList.add("disabled");
   if (prevUrl) {
     fetchPokemon(prevUrl);
   }
@@ -114,28 +141,26 @@ const handleLeftButtonClick = () => {
 //adding event listeners
 leftpagination.addEventListener("click", handleLeftButtonClick);
 rightpagination.addEventListener("click", handleRightButtonClick);
-
 //initialize functions
 fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=21&offset=0`);
+
 
 const cartQuantity = document.querySelector(".cart-quantity");
 cartQuantity.textContent = "";
 let count = 0;
-async function addToCart(id) {
-  // öka korgens nummer
+async function BuyPokemon(id) {
   const url = new URL(`https://pokeapi.co`);
   url.pathname = `/api/v2/pokemon/${id}`;
 
   const response = await fetch(url);
   const pokeman = await response.json();
 
-  count++;
-  cartQuantity.textContent = count;
-
   showCart(pokeman);
 }
 
-const showpopupcardcontainer=document.getElementById("showpopupcardcontainer");
+const showpopupcardcontainer = document.getElementById(
+  "showpopupcardcontainer"
+);
 function showCart(pokeman) {
   const image = pokeman.sprites[`front_default`];
   console.log(pokeman.id);
@@ -176,13 +201,14 @@ function showCart(pokeman) {
   </div>
 </div>
 `;
-if (showpopupcardcontainer.classList.contains("hidden")) {
-  showpopupcardcontainer.classList.remove("hidden");
-} else {
-  showpopupcardcontainer.classList.add("hidden");
+  if (showpopupcardcontainer.classList.contains("hidden")) {
+    showpopupcardcontainer.classList.remove("hidden");
+  } else {
+    showpopupcardcontainer.classList.add("hidden");
+  }
+  webshop.innerHTML = showcartHtlm + webshop.innerHTML;
 }
-webshop.innerHTML=showcartHtlm+webshop.innerHTML;
-}
+
 function showCart2() {
   if (showpopupcardcontainer.classList.contains("hidden")) {
     showpopupcardcontainer.classList.remove("hidden");

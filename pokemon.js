@@ -1,11 +1,7 @@
 // DOM Objects
 document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
-<<<<<<< HEAD
 const webshop=document.getElementById("webShop");
-=======
-
->>>>>>> 76fa7c318ced9e62a5d40660e20969c54c76eaac
 const leftpagination = document.querySelector(".left-button");
 const leftpaginationDisabled = document.querySelector(".previousDisable");
 leftpaginationDisabled.classList.add("disabled");
@@ -40,13 +36,8 @@ async function fetchPokemon(url) {
       .split('"')[1],
     image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
       JSON.stringify(pokiurl[index]).split(":")[1].split("}")[0].split('"')[1]
-<<<<<<< HEAD
     }.png`,
   }));
-=======
-    }.png`}));
-
->>>>>>> 76fa7c318ced9e62a5d40660e20969c54c76eaac
   showPokemon(pokemon);
 }
 
@@ -64,19 +55,10 @@ async function showPokemon(pokemon) {
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
      <p class="price-text"> <span class="product-price">${price2} Sek</span><p>
      <div >
-<<<<<<< HEAD
   <button id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
     Läs mer
   </button>
   <button class="btn btn-primary" onclick=addToCart(${pokeman.id}) >Köpa Kort</button>
-=======
-  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
-    Read More
-  </button>
-  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">
-    Buy Card
-  </button>
->>>>>>> 76fa7c318ced9e62a5d40660e20969c54c76eaac
    </li>
    </div>
       `
@@ -103,12 +85,7 @@ function showPopup(pokeman) {
       <h1 ">${pokeman.id}. ${pokeman.name}</h1>
       <img class="card-image" src="${image}"/>
       <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b></p>
-<<<<<<< HEAD
       <button id="closeBtn" class="btn btn-danger">Close</button>
-=======
-      <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
-      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Buy Card</button>
->>>>>>> 76fa7c318ced9e62a5d40660e20969c54c76eaac
     </div>
     `;
 

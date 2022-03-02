@@ -50,12 +50,10 @@ async function fetchPokemon(url) {
   }));
   showPokemon(pokemon);
 }
-
-async function showPokemon(pokemon) {
-  let price = Array.from({ length: 12000 }, () =>
+let price = Array.from({ length: 12000 }, () =>
     Math.floor(Math.random() * 100 + 20)
   );
-  let price2 = 299;
+async function showPokemon(pokemon) {  
   const pokemonHTMLstring = pokemon
     .map(
       (pokeman) =>
@@ -63,7 +61,7 @@ async function showPokemon(pokemon) {
       <li class="card">
       <img class="card-image" src="${pokeman.image}"/>
       <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
-     <p class="price-text"> <span class="product-price">${price2} Sek</span><p>
+     <p class="price-text"> <span class="product-price">${price[pokeman.id-1]}</span> Sek<p>
      <div >
   <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${pokeman.id})">
     Read More
@@ -165,15 +163,10 @@ function showCart(pokeman) {
   const image = pokeman.sprites[`front_default`];
   console.log(pokeman.id);
   count++;
+  let list="";
   cartQuantity.textContent = count;
-  const showcartHtlm = `
-  <div class="Cart-Container" >
-  <div class="cardHeader">
-      <h3 class="cardHeading">Shopping Cart</h3>
-      <h5 class="cardAction">Remove all</h5>
-  </div>
-  <div class="Cart-Items">
-      <div class="image-box">
+   list +=`
+<div class="image-box">
           <img src="${image}" height="120px" />
       </div>
       <div class="cardAbout">
@@ -181,14 +174,22 @@ function showCart(pokeman) {
       </div>
       <div class="cardCounter">
           <div class="cardBtn">+</div>
-          <div class="cardCount">2</div>
+          <div class="cardCount">${cartQuantity.textContent }</div>
           <div class="cardBtn">-</div>
       </div>
       <div class="cardPrices">
-          <div class="cardAmount">${pokeman.price2}</div>
+          <div class="cardAmount">${price[pokeman.id-1]}</div>
           <div class="cardRemove"><u>Remove</u></div>
       </div>
-
+`;
+  const showcartHtlm = `
+  <div class="Cart-Container" >
+  <div class="cardHeader">
+      <h3 class="cardHeading">Shopping Cart</h3>
+      <h5 class="cardAction">Remove all</h5>
+  </div>
+  <div class="Cart-Items">
+      ${list}
   </div>
   <hr>
   <div class="cardCheckout">
@@ -201,8 +202,10 @@ function showCart(pokeman) {
   </div>
 </div>
 `;
-  if (showpopupcardcontainer.classList.contains("hidden")) {
-    showpopupcardcontainer.classList.remove("hidden");
+
+  if (showpopupcardcontainer.classList.contains("hidden")) {  
+    showpopupcardcontainer.classList.remove("hidden")
+    setTimeout(()=>{showpopupcardcontainer.classList.add("hidden")},10000)
   } else {
     showpopupcardcontainer.classList.add("hidden");
   }

@@ -69,14 +69,13 @@ h1 {
   }
 .Cart-Container{
   width: 50%;
-  height: 30%;
+  min-height: 30%;
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0px 25px 40px #1687d933;
   position: absolute;
   top: 50;
-  right: 0;
-  
+  right: 0;  
  }
 }
 /*
@@ -103,7 +102,7 @@ h1 {
     display: block;
   }
 .Cart-Container{
-  height: 30%;
+  min-height: 30%;
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0px 25px 40px #1687d933;
@@ -131,8 +130,8 @@ h1 {
   height: 100%;
  }
  .titleCard{
-  padding-top: 5px;
-  line-height: 10px;
+  padding-top: 15px;
+  line-height: 20px;
   font-size: 32px;
   font-weight: 800;
   color: #202020;

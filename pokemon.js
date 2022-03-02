@@ -3,7 +3,26 @@ document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
 
 document.querySelector("#search").addEventListener("click", getPokemon);
+const searchPoke = document.getElementById("pokemonName");
 
+addEnter();
+
+function addEnter() {
+  searchPoke.addEventListener("keypress", handle);
+}
+
+function removeEnter() {
+  searchPoke.removeEventListener("keypress", handle);
+  document.querySelector("#pokemonName").value = "";
+}
+
+function handle(e) {
+  if (e.key === "Enter") {
+    getPokemon();
+    removeEnter();
+  }
+  return false;
+}
 function lowerCaseName(string) {
   return string.toLowerCase();
 }
@@ -89,15 +108,21 @@ async function selectPokemon(id) {
   showPopup(pokeman);
 }
 async function getPokemon() {
-  const nameValue = document.querySelector("#pokemonName").value;
-  const pokemonName = lowerCaseName(nameValue);
+  try {
+    const nameValue = document.querySelector("#pokemonName").value;
+    const pokemonName = lowerCaseName(nameValue);
 
-  const pokemonUrl = new URL(`https://pokeapi.co`);
-  pokemonUrl.pathname = `/api/v2/pokemon/${pokemonName}`;
+    const pokemonUrl = new URL(`https://pokeapi.co`);
+    pokemonUrl.pathname = `/api/v2/pokemon/${pokemonName}`;
 
-  const response = await fetch(pokemonUrl);
-  const pokeman = await response.json();
-  showPopup(pokeman);
+    const response = await fetch(pokemonUrl);
+    if (response.ok) {
+      const pokeman = await response.json();
+      showPopup(pokeman);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 function showPopup(pokeman) {
   const image = pokeman.sprites[`front_default`];
@@ -121,6 +146,7 @@ function closePopup() {
   popup.parentElement.removeChild(popup);
 
   document.querySelector("#pokemonName").value = "";
+  addEnter();
 }
 
 function buyPokemon() {

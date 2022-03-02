@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokemon Webshop</title>
     <link rel="icon" href="Pokeball_icon-icons.com_67533.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" type="" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 
@@ -22,30 +23,35 @@
                         class="d-inline-block align-text-top">
                     <strong id="title"></strong>
                 </a>
-                <a class="navbar-brand" href="#">
-                    <img src="/buy-icon.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
-                    <strong>Shop</strong>
-                </a>
+                <div class="cart">
+                    <span class="cart-quantity"></span>
+                    <i id="cart" class="fas fa-shopping-cart" onclick="showCart2()"></i>
+                </div>
             </div>
         </nav>
     </header>
     <main>
-        <section>           
-                <ul class="pagination pagination-lg pilar">                   
-                    <li class="page-item previousDisable">
-                        <a class="page-link">
-                           <div class="left-button ">Previous</div> </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link right-button">
-                           Next </a>
-                    </li>            
-                </ul>
-        </section>
-        <section  class="container">
+        <aside class="hidden" id="showpopupcardcontainer">
+            <div id="webShop">
+
+            </div>
+        </aside>
+
+        <section class="container">
+            <ul class="pagination pagination-lg pilar">
+                <li class="page-item previousDisable">
+                    <a class="page-link">
+                        <div class="left-button ">Previous</div>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link right-button">
+                        Next </a>
+                </li>
+            </ul>
             <div class="pokemonBox"></div>
             <ol id="pokeWeb"></ol>
-        </section>           
+        </section>
     </main>
     <script src="pokemon.js"></script>
 </body>

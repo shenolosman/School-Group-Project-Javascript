@@ -67,11 +67,11 @@ async function fetchPokemon(url) {
   }));
   showPokemon(pokemon);
 }
+let price = Array.from({ length: 12000 }, () =>
+  Math.floor(Math.random() * 100 + 20)
+);
 
 async function showPokemon(pokemon) {
-  let price = Array.from({ length: 12000 }, () =>
-    Math.floor(Math.random() * 100 + 20)
-  );
   const pokemonHTMLstring = pokemon
     .map(
       (pokeman) =>
@@ -189,13 +189,24 @@ async function BuyPokemon(id) {
   showBoughtPoke(pokeman);
 }
 let pokes = [];
+const titles = document.getElementById("buyInfo");
 
 function showBoughtPoke(pokeman) {
-  if (pokeman) alert(`köpt pokemon ${pokeman.id}, ${pokeman.name}`);
-  pokes.push({ id: pokeman.id, name: pokeman.name });
+  if (pokeman)
+    alert(`Lägger till pokemon ${pokeman.id}, ${pokeman.name} i varukorgen`);
+  pokes.push(
+    `id: ${pokeman.id}, name: ${pokeman.name}, price: ${
+      price[pokeman.id - 1]
+    }kr `
+  );
+
+  /*  {
+    id: pokeman.id,
+    name: pokeman.name,
+    price: price[pokeman.id - 1] + "kr",
+  });*/
   console.log(pokes);
   localStorage.setItem("köpta", JSON.stringify(pokes));
-
   //pokes.push(JSON.stringify(pokeman.name));
 }
 
@@ -205,8 +216,12 @@ showBought.addEventListener("click", listOfPoke);
 const listPoke =
   localStorage.getItem("köpta") === null ? 0 : localStorage.getItem("köpta");
 
+//boughtPoke.addEventListener("click", listOfPoke);
+//titles.onclick = listOfPoke;
+
 function listOfPoke() {
   alert(`${listPoke}`);
+  // titles.innerHTML = listPoke;
 }
 
 const removeItems = document.getElementById("exit");

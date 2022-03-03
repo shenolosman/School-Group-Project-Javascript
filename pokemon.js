@@ -14,7 +14,7 @@ function addEnter() {
 
 function removeEnter() {
   searchPoke.removeEventListener("keypress", handle);
-  document.querySelector("#pokemonName").value = "";
+  // document.querySelector("#pokemonName").value = "";
 }
 
 function handle(e) {
@@ -72,9 +72,11 @@ async function fetchPokemon(url) {
   }));
   showPokemon(pokemon);
 }
+
 let price = Array.from({ length: 12000 }, () =>
   Math.floor(Math.random() * 100 + 20)
 );
+
 async function showPokemon(pokemon) {
   const pokemonHTMLstring = pokemon
     .map(

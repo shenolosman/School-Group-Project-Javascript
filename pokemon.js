@@ -202,7 +202,8 @@ function showBoughtPoke(pokeman) {
 const showBought = document.getElementById("buyIcon");
 showBought.addEventListener("click", listOfPoke);
 
-const listPoke = localStorage.getItem("köpta");
+const listPoke =
+  localStorage.getItem("köpta") === null ? 0 : localStorage.getItem("köpta");
 
 function listOfPoke() {
   alert(`${listPoke}`);

@@ -13,7 +13,7 @@ function addEnter() {
 
 function removeEnter() {
   searchPoke.removeEventListener("keypress", handle);
-  document.querySelector("#pokemonName").value = "";
+  // document.querySelector("#pokemonName").value = "";
 }
 
 function handle(e) {
@@ -175,3 +175,42 @@ leftpagination.addEventListener("click", handleLeftButtonClick);
 rightpagination.addEventListener("click", handleRightButtonClick);
 //initialize functions
 fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=0`);
+
+/// testar att köpa pokemons..
+const boughtPoke = document.getElementById("buy-pokemon-btn");
+
+async function BuyPokemon(id) {
+  const url = new URL(`https://pokeapi.co`);
+  url.pathname = `/api/v2/pokemon/${id}`;
+
+  const response = await fetch(url);
+  const pokeman = await response.json();
+  //showPopup(pokeman);
+  showBoughtPoke(pokeman);
+}
+let pokes = [];
+
+function showBoughtPoke(pokeman) {
+  if (pokeman) alert(`köpt pokemon ${pokeman.id}, ${pokeman.name}`);
+  pokes.push({ id: pokeman.id, name: pokeman.name });
+  console.log(pokes);
+  localStorage.setItem("köpta", JSON.stringify(pokes));
+
+  //pokes.push(JSON.stringify(pokeman.name));
+}
+
+const showBought = document.getElementById("buyIcon");
+showBought.addEventListener("click", listOfPoke);
+
+const listPoke = localStorage.getItem("köpta");
+
+function listOfPoke() {
+  alert(`${listPoke}`);
+}
+
+const removeItems = document.getElementById("exit");
+removeItems.addEventListener("click", removePokes);
+
+function removePokes() {
+  localStorage.removeItem("köpta");
+}

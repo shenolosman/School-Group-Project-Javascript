@@ -177,8 +177,13 @@ let cart = [];
 
 //shopping cart starts
 const cartQuantity = document.querySelector(".cart-quantity");
-cartQuantity.textContent = "";
+
 let count = 0;
+cartQuantity.textContent =
+  localStorage.getItem("counter") === null
+    ? 0
+    : localStorage.getItem("counter");
+
 const productRows = document.getElementsByClassName("product-rows")[0];
 
 async function BuyPokemon(id) {
@@ -196,11 +201,12 @@ const showpopupcardcontainer = document.getElementById(
 
 function showCart(pokeman) {
   count++;
+  localStorage.setItem("counter", count);
   let htmlList = "";
   const image = pokeman.sprites[`front_default`];
   cartQuantity.textContent = count;
   if (pokeman) {
-      htmlList =`<div class="Cart-Items">
+    htmlList = `<div class="Cart-Items">
       <div class="image-box">
         <img src="${image}" height="120px" alt="${pokeman.name}"/>
       </div>
@@ -211,7 +217,7 @@ function showCart(pokeman) {
         <div class="cardAmount">${price[pokeman.id - 1]} kr</div>
       </div>   
     </div>`;
-    }
+  }
 
   const showcartHtlm = `<div class="Cart-Container" >
       <div class="cardHeader">
@@ -288,5 +294,11 @@ function popupCard() {
 }
 function removePokes() {
   localStorage.removeItem("bought");
+  localStorage.removeItem("counter");
+  cartQuantity.textContent =
+    localStorage.getItem("counter") === null
+      ? 0
+      : localStorage.getItem("counter");
+  cart = [];
   showpopupcardcontainer.classList.add("hidden");
 }

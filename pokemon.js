@@ -299,6 +299,7 @@ function removePokes() {
     localStorage.getItem("counter") === null
       ? 0
       : localStorage.getItem("counter");
+  count = 0;
   cart = [];
   showpopupcardcontainer.classList.add("hidden");
 }

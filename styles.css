@@ -2,7 +2,6 @@ body {
   background-color: rgb(4, 4, 207) !important;
   margin: 0;
   font-family: "Arial Narrow", sans-serif;
-  
 }
 h1 {
   color: white;
@@ -61,84 +60,79 @@ h1 {
 .pilar {
   margin-top: 20px;
 }
-
 /*CART MODAL*/
 @media screen and (min-width: 750px) {
-  aside{
+  aside {
     display: inline-block;
   }
-.Cart-Container{
-  width: 50%;
- /* min-height: 30%;*/
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0px 25px 40px #1687d933;
-  position: absolute;
-  top: 60px;
-  right: 0;  
- }
+  .Cart-Container {
+    width: 50%;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0px 25px 40px #1687d933;
+    position: absolute;
+    top: 60px;
+    right: 0;
+  }
 }
 @media screen and (max-width: 750px) {
-  aside{
+  aside {
     margin: 0 auto;
     display: block;
   }
-.Cart-Container{
-   /* min-height: 30%;*/
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0px 25px 40px #1687d933;
-  position: relative;
-  display: block;
-  width: 100%;
- }
+  .Cart-Container {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0px 25px 40px #1687d933;
+    position: relative;
+    display: block;
+    width: 100%;
+  }
 }
-.hidden{
+.hidden {
   visibility: hidden;
 }
-.Cart-Items{
+.Cart-Items {
   margin: auto;
   width: 90%;
   height: 10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
- }
- .image-box{
+}
+.image-box {
   width: 15%;
   text-align: center;
- }
- .cardAbout{
+}
+.cardAbout {
   height: 100%;
- }
- .titleCard{
-   display: inline;
+}
+.titleCard {
+  display: inline;
   font-size: 32px;
   color: #000000;
- }
-
- .cardHeader{
+}
+.cardHeader {
   margin: auto;
   width: 90%;
   height: 15%;
   display: flex;
   justify-content: space-between;
   align-items: center;
- }
- .cardHeading{
+}
+.cardHeading {
   font-size: 20px;
   font-weight: 700;
-  color: #2F3841;
- }
- .cardAction{
+  color: #2f3841;
+}
+.cardAction {
   font-size: 14px;
   font-weight: 600;
-  color: #E44C4C;
+  color: #e44c4c;
   cursor: pointer;
-  border-bottom: 1px solid #E44C4C;
- }
-
- .cardBtn{
+  border-bottom: 1px solid #e44c4c;
+}
+.cardBtn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -150,23 +144,22 @@ h1 {
   font-weight: 900;
   color: #202020;
   cursor: pointer;
- }
- .cardCount{
+}
+.cardCount {
   font-size: 20px;
   font-weight: 900;
   color: #202020;
- }
-
- .cardPrices{
+}
+.cardPrices {
   height: 100%;
   text-align: right;
- }
- .cardAmount{
+}
+.cardAmount {
   padding-top: 20px;
   font-size: 26px;
   font-weight: 800;
   color: #202020;
- }
+}
 .left-button,
 .right-button {
   cursor: pointer;

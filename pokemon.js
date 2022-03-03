@@ -14,7 +14,6 @@ function addEnter() {
 
 function removeEnter() {
   searchPoke.removeEventListener("keypress", handle);
-  // document.querySelector("#pokemonName").value = "";
 }
 
 function handle(e) {
@@ -42,7 +41,6 @@ let prevUrl = null;
 let nextUrl = null;
 
 //Functions
-
 async function fetchPokemon(url) {
   url = new URL(url);
 

@@ -1,6 +1,7 @@
 // DOM Objects
 document.getElementById("title").innerHTML = "Pokemon Webshop";
 const pokeWeb = document.getElementById("pokeWeb");
+const webshop = document.getElementById("webShop");
 
 document.querySelector("#search").addEventListener("click", getPokemon);
 const searchPoke = document.getElementById("pokemonName");
@@ -35,10 +36,13 @@ leftpaginationDisabled.classList.add("disabled");
 const rightpagination = document.querySelector(".right-button");
 rightpagination.innerHTML = "Next";
 const rightpaginationDisabled = document.querySelector(".nextDisable");
+
 //constanst and variables
 let prevUrl = null;
 let nextUrl = null;
+
 //Functions
+
 async function fetchPokemon(url) {
   url = new URL(url);
 
@@ -46,15 +50,16 @@ async function fetchPokemon(url) {
 
   const data = await response.json();
 
-  const { result, previous, next } = data;
+  const { previous, next } = data;
   prevUrl = previous;
   nextUrl = next;
+  let resultt = data.results;
 
-  const pokiurl = data.results.map((result) => ({
+  const pokiurl = resultt.map((result) => ({
     id: result.url.split("/")[6],
   }));
 
-  const pokemon = data.results.map((result, index) => ({
+  const pokemon = resultt.map((result, index) => ({
     apiURL: result.url,
     name: result.name,
     id: JSON.stringify(pokiurl[index])
@@ -75,25 +80,21 @@ let price = Array.from({ length: 12000 }, () =>
 async function showPokemon(pokemon) {
   const pokemonHTMLstring = pokemon
     .map(
-      (pokeman) =>
+      (p) =>
         `
       <li class="card">
-      <img class="card-image" src="${pokeman.image}"/>
-      <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
-     <p class="price-text">$${price[pokeman.id - 1]}<p>
-     <div >
-  <button type="button" id="select-pokemon-btn" class="btn btn-success" onclick="selectPokemon(${
-    pokeman.id
-  })">
-    Read More
-  </button>
-  <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${
-    pokeman.id
-  })">
-    Buy Card
-  </button>
-   </li>
-   </div>
+        <img class="card-image" src="${p.image}"/>
+        <h2 class="card-title">${p.id}. ${p.name}</h2>
+        <p class="price-text"> <span class="product-price">${
+          price[p.id - 1]
+        }</span> kr<p>
+        <button type="button" class="btn btn-success" onclick="selectPokemon(${
+          p.id
+        })">Read More</button>
+        <button class="btn btn-primary add-cart" onclick="BuyPokemon(${
+          p.id
+        })">Buy Card</button>
+      </li>
       `
     )
     .join("");
@@ -134,8 +135,7 @@ function showPopup(pokeman) {
       <h1 ">${pokeman.id}. ${pokeman.name}</h1>
       <img class="card-image" src="${image}"/>
       <p class="text">Height: <b>${pokeman.height}</b> | Weight: <b>${pokeman.weight}</b>  | Type: <b>${type}</b></p>
-      <button type="button" id="closeBtn" class="btn btn-danger">Close</button>
-      <button type="button" id="buy-pokemon-btn" class="btn btn-primary" onclick="BuyPokemon(${pokeman.id})">Buy Card</button>
+      <button id="closeBtn" class="btn btn-danger">Close</button>
     </div>
     `;
 
@@ -148,10 +148,6 @@ function closePopup() {
 
   document.querySelector("#pokemonName").value = "";
   addEnter();
-}
-
-function buyPokemon() {
-  //skriv function to add pokemons to buy listan
 }
 
 const handleRightButtonClick = () => {
@@ -175,4 +171,122 @@ const handleLeftButtonClick = () => {
 leftpagination.addEventListener("click", handleLeftButtonClick);
 rightpagination.addEventListener("click", handleRightButtonClick);
 //initialize functions
-fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=0`);
+fetchPokemon(`https://pokeapi.co/api/v2/pokemon?limit=21&offset=0`);
+
+let cart = [];
+
+//shopping cart starts
+const cartQuantity = document.querySelector(".cart-quantity");
+cartQuantity.textContent = "";
+let count = 0;
+const productRows = document.getElementsByClassName("product-rows")[0];
+
+async function BuyPokemon(id) {
+  const url = new URL(`https://pokeapi.co`);
+  url.pathname = `/api/v2/pokemon/${id}`;
+
+  const response = await fetch(url);
+  const pokeman = await response.json();
+
+  showCart(pokeman);
+}
+const showpopupcardcontainer = document.getElementById(
+  "showpopupcardcontainer"
+);
+
+function showCart(pokeman) {
+  count++;
+  let htmlList = "";
+  const image = pokeman.sprites[`front_default`];
+  cartQuantity.textContent = count;
+  if (pokeman) {
+      htmlList =`<div class="Cart-Items">
+      <div class="image-box">
+        <img src="${image}" height="120px" alt="${pokeman.name}"/>
+      </div>
+      <div class="cardAbout">
+        <h1 class="titleCard">${pokeman.name}</h1>
+      </div>
+      <div class="cardPrices">
+        <div class="cardAmount">${price[pokeman.id - 1]} kr</div>
+      </div>   
+    </div>`;
+    }
+
+  const showcartHtlm = `<div class="Cart-Container" >
+      <div class="cardHeader">
+        <h3 class="cardHeading">Shopping Cart</h3>
+        <h5 class="cardAction" onclick="removePokes()">Remove all</h5>
+      </div>
+      <div class="product-rows">    
+      ${htmlList}      
+      </div> 
+    </div>`;
+
+  if (showpopupcardcontainer.classList.contains("hidden")) {
+    showpopupcardcontainer.classList.remove("hidden");
+    setTimeout(() => {
+      showpopupcardcontainer.classList.add("hidden");
+    }, 1000);
+  } else {
+    showpopupcardcontainer.classList.add("hidden");
+  }
+
+  webshop.innerHTML = showcartHtlm;
+
+  cart.push({
+    id: pokeman.id,
+    name: pokeman.name,
+    price: price[pokeman.id - 1],
+    img: image,
+  });
+  localStorage.setItem("bought", JSON.stringify(cart));
+}
+
+function popupCard() {
+  let html = "";
+  //fulla korgen med localstorage
+  const listPoke = localStorage.getItem("bought");
+  let cart = JSON.parse(listPoke);
+  if (cart != null) {
+    for (let key of cart) {
+      html += `<div class="Cart-Items">
+       <div class="image-box">
+         <img src="${key.img}" height="120px" alt="${key.name}"/>
+       </div>
+       <div class="cardAbout">
+         <h1 class="titleCard">${key.name}</h1>
+       </div>
+       <div class="cardPrices">
+         <div class="cardAmount">${key.price} kr</div>
+       </div>   
+     </div>`;
+    }
+  }
+  const showcartHtlm = `
+    <div class="Cart-Container" >
+      <div class="cardHeader">
+        <h3 class="cardHeading">Shopping Cart</h3>
+        <h5 class="cardAction" onclick="removePokes()">Remove all</h5>
+      </div>
+      <div class="product-rows">    
+      ${html}      
+      </div> 
+    </div>
+  `;
+  webshop.innerHTML = showcartHtlm;
+  if (cart === null) {
+    alert("Your cart is empty!");
+    showpopupcardcontainer.classList.add("hidden");
+  } else {
+    if (showpopupcardcontainer.classList.contains("hidden")) {
+      showpopupcardcontainer.classList.remove("hidden");
+    } else {
+      showpopupcardcontainer.classList.add("hidden");
+    }
+  }
+}
+function removePokes() {
+  localStorage.removeItem("bought");
+  showpopupcardcontainer.classList.add("hidden");
+}
